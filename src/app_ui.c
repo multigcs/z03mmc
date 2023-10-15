@@ -152,30 +152,6 @@ void buttonKeepPressed(u8 btNum){
 void buttonShortPressed(u8 btNum){
 	if(btNum == VK_SW1){
 		if(zb_isDeviceJoinedNwk()){
-#ifdef ZCL_IAS_ZONE
-            static int tflag = 0;
-			epInfo_t dstEpInfo;
-			memset((u8 *)&dstEpInfo, 0, sizeof(epInfo_t));
-			dstEpInfo.dstAddrMode = APS_SHORT_DSTADDR_WITHEP;
-			dstEpInfo.dstEp = SENSOR_DEVICE_ENDPOINT;
-			dstEpInfo.dstAddr.shortAddr = 0x0000;
-			dstEpInfo.profileId = HA_PROFILE_ID;
-			zoneStatusChangeNoti_t statusChangeNotification;
-            if (tflag == 0) {
-                statusChangeNotification.zoneStatus = ZONE_STATUS_BIT_ALARM1;
-                tflag = 1;
-            } else {
-                statusChangeNotification.zoneStatus = 0x0000;
-                tflag = 0;
-            }
-			statusChangeNotification.extStatus = 0;
-			statusChangeNotification.zoneId = ZCL_ZONE_ID_INVALID;
-			statusChangeNotification.delay = 0;
-			zcl_iasZone_statusChangeNotificationCmd(SENSOR_DEVICE_ENDPOINT, &dstEpInfo, TRUE, &statusChangeNotification);
-#endif
-		}
-	}else if(btNum == VK_SW2){
-		if(zb_isDeviceJoinedNwk()){
 #ifdef ZCL_ON_OFF
             epInfo_t dstEpInfo1;
             TL_SETSTRUCTCONTENT(dstEpInfo1, 0);
@@ -185,6 +161,9 @@ void buttonShortPressed(u8 btNum){
             dstEpInfo1.profileId = HA_PROFILE_ID;
             zcl_onOff_toggleCmd(SENSOR_DEVICE_ENDPOINT, &dstEpInfo1, FALSE);
 #endif
+		}
+	}else if(btNum == VK_SW2){
+		if(zb_isDeviceJoinedNwk()){
 		}
 	}
 }
@@ -228,4 +207,36 @@ void app_key_handler(void){
 			g_sensorAppCtx.keyPressed = 0;
 		}
 	}
+
+#ifdef ZCL_IAS_ZONE
+    u8 presence_new = 0;
+    static u8 presence_last = -1;
+
+    if (drv_gpio_read(PRESENCE)) {
+        presence_new = 1;
+    } else {
+        presence_new = 0;
+    }
+    
+    if (presence_new != presence_last) {
+        presence_last = presence_new;
+        epInfo_t dstEpInfo;
+        memset((u8 *)&dstEpInfo, 0, sizeof(epInfo_t));
+        dstEpInfo.dstAddrMode = APS_SHORT_DSTADDR_WITHEP;
+        dstEpInfo.dstEp = SENSOR_DEVICE_ENDPOINT;
+        dstEpInfo.dstAddr.shortAddr = 0x0000;
+        dstEpInfo.profileId = HA_PROFILE_ID;
+        zoneStatusChangeNoti_t statusChangeNotification;
+        if (presence_new == 0) {
+            statusChangeNotification.zoneStatus = 0x0000;
+        } else {
+            statusChangeNotification.zoneStatus = ZONE_STATUS_BIT_ALARM1;
+        }
+        statusChangeNotification.extStatus = 0;
+        statusChangeNotification.zoneId = ZCL_ZONE_ID_INVALID;
+        statusChangeNotification.delay = 0;
+        zcl_iasZone_statusChangeNotificationCmd(SENSOR_DEVICE_ENDPOINT, &dstEpInfo, TRUE, &statusChangeNotification);
+    }
+#endif
+
 }

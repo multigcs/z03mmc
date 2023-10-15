@@ -404,6 +404,9 @@ void user_init(bool isRetention)
             0x003c,
             (u8 *)&reportableChange
         );
+
+        drv_gpio_write(LED1, 1);
+
 #endif
 
 		/* Initialize BDB */

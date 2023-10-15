@@ -23,7 +23,14 @@ extern "C" {
 #define PA6_FUNC			  		AS_GPIO
 #define PA6_OUTPUT_ENABLE	  		0
 #define PA6_INPUT_ENABLE	  		1
-#define	PULL_WAKEUP_SRC_PA6	  		PM_PIN_PULLUP_1M
+#define	PULL_WAKEUP_SRC_PA6	  		PM_PIN_PULLUP_10K
+
+#define PRESENCE               		GPIO_PD7  // P7 test point
+#define PD7_FUNC			  		AS_GPIO
+#define PD7_OUTPUT_ENABLE	  		0
+#define PD7_INPUT_ENABLE	  		1
+#define	PULL_WAKEUP_SRC_PD7	  		PM_PIN_PULLUP_10K
+
 
 // LED
 #define LED1     					GPIO_PC4

@@ -147,7 +147,7 @@ extern "C" {
 #endif
 
 /* LCD */
-#define	MODULE_LCD_ENABLE							0
+#define	MODULE_LCD_ENABLE							1
 
 
 /**********************************************************************

@@ -46,7 +46,7 @@ static void sensorDevice_zclDfltRspCmd(u16 clusterId, zclDefaultRspCmd_t *pDftRs
 static ev_timer_event_t *identifyTimerEvt = NULL;
 #endif
 
-static uint8_t led_stat = 0;
+static uint8_t led_stat = 1;
 
 /**********************************************************************
  * FUNCTIONS
