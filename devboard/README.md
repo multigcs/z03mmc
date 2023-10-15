@@ -30,3 +30,6 @@
 | B3 | 3V3 |
 | B4 | GND |
 
+
+![](./open.jpg)
+![](./closed.jpg)
