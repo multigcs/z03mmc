@@ -25,15 +25,11 @@ i have problems to flash the devices, best way for me at the moment:
 * using pl2303hx usb adapter
 ```
 # erase complete flash with one tool
-python3 TLSR825xComFlasher.py -p /dev/ttyUSB0 ea
+python3 TLSR825xComFlasher.py -p /dev/ttyUSB0 -b 500000 ea
 # then write with an other tool
-python3 ATCtelink.py --port /dev/ttyUSB0 build/src/z03mmc.bin
+python3 ATCtelink.py  --port /dev/ttyUSB0 --baud 500000 build/src/z03mmc.bin
 ```
 
-some boards not working with this setup, so i can try it with FTDI-Adapter:
-```
-python3 ATCtelink.py --tact 1000 -d  --baud 340000 build/src/z03mmc.bin
-```
 
 
 ## Overview
