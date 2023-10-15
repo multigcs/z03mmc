@@ -49,6 +49,9 @@ const u16 sensorDevice_inClusterList[] =
 {
 	ZCL_CLUSTER_GEN_BASIC,
 	ZCL_CLUSTER_GEN_IDENTIFY,
+#ifdef ZCL_ON_OFF
+	ZCL_CLUSTER_GEN_ON_OFF,
+#endif
 	ZCL_CLUSTER_GEN_POWER_CFG,
 #ifdef ZCL_RELATIVE_HUMIDITY_MEASUREMENT
     ZCL_CLUSTER_MS_RELATIVE_HUMIDITY,
@@ -108,7 +111,11 @@ zcl_basicAttr_t g_zcl_basicAttrs =
 #ifdef ZCL_BASIC_SW_BUILD_ID
 	.swBuildId		= ZCL_BASIC_SW_BUILD_ID,
 #endif
+#ifdef ZCL_ON_OFF
+	.powerSource	= POWER_SOURCE_MAINS_1_PHASE,
+#else
 	.powerSource	= POWER_SOURCE_BATTERY,
+#endif
 	.deviceEnable	= TRUE,
 };
 
@@ -161,6 +168,32 @@ const zclAttrInfo_t powerCfg_attrTbl[] =
 };
 
 #define	ZCL_POWER_CFG_ATTR_NUM		 sizeof(powerCfg_attrTbl) / sizeof(zclAttrInfo_t)
+
+
+#ifdef ZCL_ON_OFF
+/* On/Off */
+zcl_onOffAttr_t g_zcl_onOffAttrs =
+{
+	.onOff				= 0x00,
+	.globalSceneControl	= 1,
+	.onTime				= 0x0000,
+	.offWaitTime		= 0x0000,
+	.startUpOnOff 		= ZCL_START_UP_ONOFF_SET_ONOFF_TO_ON,
+};
+
+const zclAttrInfo_t onOff_attrTbl[] =
+{
+	{ ZCL_ATTRID_ONOFF,  					ZCL_DATA_TYPE_BOOLEAN,  ACCESS_CONTROL_READ | ACCESS_CONTROL_REPORTABLE,  (u8*)&g_zcl_onOffAttrs.onOff},
+	{ ZCL_ATTRID_GLOBAL_SCENE_CONTROL, 		ZCL_DATA_TYPE_BOOLEAN, 	ACCESS_CONTROL_READ, 							  (u8*)&g_zcl_onOffAttrs.globalSceneControl},
+	{ ZCL_ATTRID_ON_TIME, 					ZCL_DATA_TYPE_UINT16, 	ACCESS_CONTROL_READ | ACCESS_CONTROL_WRITE, 	  (u8*)&g_zcl_onOffAttrs.onTime},
+	{ ZCL_ATTRID_OFF_WAIT_TIME, 			ZCL_DATA_TYPE_UINT16, 	ACCESS_CONTROL_READ | ACCESS_CONTROL_WRITE, 	  (u8*)&g_zcl_onOffAttrs.offWaitTime},
+	{ ZCL_ATTRID_START_UP_ONOFF, 			ZCL_DATA_TYPE_ENUM8, 	ACCESS_CONTROL_READ | ACCESS_CONTROL_WRITE, 	  (u8*)&g_zcl_onOffAttrs.startUpOnOff},
+
+	{ ZCL_ATTRID_GLOBAL_CLUSTER_REVISION, 	ZCL_DATA_TYPE_UINT16,  	ACCESS_CONTROL_READ,  							  (u8*)&zcl_attr_global_clusterRevision},
+};
+
+#define ZCL_ONOFF_ATTR_NUM	 sizeof(onOff_attrTbl) / sizeof(zclAttrInfo_t)
+#endif
 
 
 #ifdef ZCL_IAS_ZONE
@@ -273,6 +306,9 @@ const zcl_specClusterInfo_t g_sensorDeviceClusterList[] =
 	{ZCL_CLUSTER_GEN_BASIC,			MANUFACTURER_CODE_NONE, ZCL_BASIC_ATTR_NUM, 	basic_attrTbl,  	zcl_basic_register,		sensorDevice_basicCb},
 	{ZCL_CLUSTER_GEN_IDENTIFY,		MANUFACTURER_CODE_NONE, ZCL_IDENTIFY_ATTR_NUM,	identify_attrTbl,	zcl_identify_register,	sensorDevice_identifyCb},
 	{ZCL_CLUSTER_GEN_POWER_CFG,		MANUFACTURER_CODE_NONE,	ZCL_POWER_CFG_ATTR_NUM,	powerCfg_attrTbl,	zcl_powerCfg_register,	sensorDevice_powerCfgCb},
+#ifdef ZCL_ON_OFF
+	{ZCL_CLUSTER_GEN_ON_OFF,	    MANUFACTURER_CODE_NONE,	ZCL_ONOFF_ATTR_NUM,		onOff_attrTbl,		zcl_onOff_register,	    sensorDevice_onOffCb},
+#endif
 #ifdef ZCL_IAS_ZONE
 	{ZCL_CLUSTER_SS_IAS_ZONE,		MANUFACTURER_CODE_NONE, ZCL_IASZONE_ATTR_NUM,	iasZone_attrTbl,	zcl_iasZone_register,	sensorDevice_iasZoneCb},
 #endif

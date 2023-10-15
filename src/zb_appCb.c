@@ -146,7 +146,9 @@ void zbdemo_bdbInitCb(u8 status, u8 joinedNetwork){
 void zbdemo_bdbCommissioningCb(u8 status, void *arg){
 	switch(status){
 		case BDB_COMMISSION_STA_SUCCESS:
+#if MODULE_LCD_ENABLE
 			light_blink_start(2, 200, 200);
+#endif // MODULE_LCD_ENABLE
 
 			zb_setPollRate(POLL_RATE);
 

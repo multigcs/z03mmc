@@ -89,6 +89,27 @@ typedef struct {
 	u16 tolerance;
 }zcl_relHumidityAttr_t;
 
+/**
+ *  @brief Defined for on/off cluster attributes
+ */
+typedef struct{
+	u16	 onTime;
+	u16	 offWaitTime;
+	u8	 startUpOnOff;
+	bool onOff;
+	bool globalSceneControl;
+}zcl_onOffAttr_t;
+
+/**
+ *  @brief Defined for ias zone cluster attributes
+ */
+typedef struct {
+	u8  zoneState;
+	u16 zoneType;
+	u16 zoneStatus;
+	extAddr_t  iasCieAddr;
+	u8  zoneId;
+}zcl_iasZoneAttr_t;
 
 /**
  *  @brief  Defined for poll control cluster attributes
@@ -127,11 +148,13 @@ extern zcl_identifyAttr_t g_zcl_identifyAttrs;
 extern zcl_powerAttr_t g_zcl_powerAttrs;
 extern zcl_temperatureAttr_t g_zcl_temperatureAttrs;
 extern zcl_relHumidityAttr_t g_zcl_relHumidityAttrs;
+extern zcl_onOffAttr_t g_zcl_onOffAttrs;
 // extern zcl_iasZoneAttr_t g_zcl_iasZoneAttrs;
 extern zcl_pollCtrlAttr_t g_zcl_pollCtrlAttrs;
 
 #define zcl_iasZoneAttrGet()	&g_zcl_iasZoneAttrs
 #define zcl_pollCtrlAttrGet()	&g_zcl_pollCtrlAttrs
+#define zcl_onoffAttrGet()		&g_zcl_onOffAttrs
 
 extern scomfort_t cmf;
 
@@ -145,6 +168,7 @@ status_t sensorDevice_identifyCb(zclIncomingAddrInfo_t *pAddrInfo, u8 cmdId, voi
 status_t sensorDevice_iasZoneCb(zclIncomingAddrInfo_t *pAddrInfo, u8 cmdId, void *cmdPayload);
 status_t sensorDevice_powerCfgCb(zclIncomingAddrInfo_t *pAddrInfo, u8 cmdId, void *cmdPayload);
 status_t sensorDevice_pollCtrlCb(zclIncomingAddrInfo_t *pAddrInfo, u8 cmdId, void *cmdPayload);
+status_t sensorDevice_onOffCb(zclIncomingAddrInfo_t *pAddrInfo, u8 cmdId, void *cmdPayload);
 void sensorDevice_zclCheckInStart(void);
 
 void sensorDevice_leaveCnfHandler(nlme_leave_cnf_t *pLeaveCnf);

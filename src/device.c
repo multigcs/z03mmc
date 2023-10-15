@@ -15,7 +15,9 @@
 #include "zcl_relative_humidity.h"
 #include "app_i2c.h"
 #include "shtv3_sensor.h"
+#if MODULE_LCD_ENABLE
 #include "lcd.h"
+#endif
 
 
 /**********************************************************************
@@ -162,10 +164,13 @@ void user_app_init(void)
     ota_init(OTA_TYPE_CLIENT, (af_simple_descriptor_t *)&sensorDevice_simpleDesc, &sensorDevice_otaInfo, &sensorDevice_otaCb);
 #endif
 
+#if MODULE_LCD_ENABLE
 	show_zigbe();
+#endif
 
     // read sensor every 10 seconds
     read_sensor_start(10000);
+
 }
 
 _attribute_ram_code_
@@ -199,6 +204,7 @@ void read_sensor_and_save() {
     g_zcl_powerAttrs.batteryPercentage = percentage2;
 
     // update lcd
+#if MODULE_LCD_ENABLE
     show_temp_symbol(1);
     show_big_number(g_zcl_temperatureAttrs.measuredValue / 10, 1);
     show_small_number(g_zcl_relHumidityAttrs.measuredValue / 100, 1);
@@ -208,6 +214,7 @@ void read_sensor_and_save() {
     );
 #endif
     update_lcd();
+#endif // MODULE_LCD_ENABLE
 }
 
 s32 zclSensorTimerCb(void *arg)
@@ -259,7 +266,9 @@ void app_task(void)
 	if(bdb_isIdle()){
 #if PM_ENABLE
 		if(!g_sensorAppCtx.keyPressed){
+#ifndef ZCL_ON_OFF
 			drv_pm_lowPowerEnter();
+#endif
 		}
 #endif
         // factoryRst_handler();
@@ -309,9 +318,11 @@ void user_init(bool isRetention)
 
 	init_i2c();
 	init_sensor();
+#if MODULE_LCD_ENABLE
     init_lcd(!isRetention);
     // initialize indicator (ble symbol)
     ind_init();
+#endif
 
 	if(!isRetention){
 	    /* Populate swBuildId version */
@@ -383,6 +394,17 @@ void user_init(bool isRetention)
 			0x003c,
 			(u8 *)&reportableChange
 		);
+#ifdef ZCL_ON_OFF
+        bdb_defaultReportingCfg(
+            SENSOR_DEVICE_ENDPOINT,
+            HA_PROFILE_ID,
+            ZCL_CLUSTER_GEN_ON_OFF,
+            ZCL_ATTRID_ONOFF,
+            0x0000,
+            0x003c,
+            (u8 *)&reportableChange
+        );
+#endif
 
 		/* Initialize BDB */
 		u8 repower = drv_pm_deepSleep_flag_get() ? 0 : 1;

@@ -2,6 +2,34 @@
 
 This repository contains the Zigbee firmware for Xiaomi LYWSD03MMC Bluetooth temperature and humidity sensor.
 
+Forked from https://github.com/devbis/z03mmc/
+
+## my Changes
+
+* optional switch output (to control relais or light)
+
+* optional switch input (for light switches)
+
+* optional switch input (for window/door contact or presense sensors)
+
+* optional disable lcd-display (too minimize delays)
+
+### known issues
+
+* sometimes 1-3s delay while toggle the switch output
+
+* i can not flash all devices !?!?!
+
+## comments
+
+i have problems to flash the devices, best way for me at the moment:
+```
+# erase complete flash with one tool
+python3 TLSR825xComFlasher.py -p /dev/ttyUSB0 ea
+# then write with an other tool
+python3 ATCtelink.py --port /dev/ttyUSB0 build/src/z03mmc.bin
+```
+
 ## Overview
 
 ![](./assets/device.jpg)

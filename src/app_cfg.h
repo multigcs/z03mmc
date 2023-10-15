@@ -42,7 +42,7 @@ extern "C" {
 #define USB_PRINTF_MODE         		0
 
 /* PM */
-#define PM_ENABLE						1
+#define PM_ENABLE						0
 
 /* PA */
 #define PA_ENABLE						0
@@ -146,22 +146,31 @@ extern "C" {
 	#define ZBHCI_EN								1
 #endif
 
+/* LCD */
+#define	MODULE_LCD_ENABLE							0
+
 
 /**********************************************************************
  * ZCL cluster support setting
  */
 #define ZCL_POWER_CFG_SUPPORT						1
-//#define ZCL_IAS_ZONE_SUPPORT						1
+#define ZCL_IAS_ZONE_SUPPORT						1
 #define ZCL_TEMPERATURE_MEASUREMENT_SUPPORT			1
 #define ZCL_RELATIVE_HUMIDITY_SUPPORT   			1
 #define ZCL_POLL_CTRL_SUPPORT						1
 #define ZCL_OTA_SUPPORT								1
-
+#define ZCL_ON_OFF_SUPPORT							1
 
 // for consistency
 #if ZCL_RELATIVE_HUMIDITY_SUPPORT
 #define ZCL_RELATIVE_HUMIDITY
 #define ZCL_RELATIVE_HUMIDITY_MEASUREMENT
+#endif
+#if ZCL_ON_OFF_SUPPORT
+#define ZCL_ON_OFF
+#endif
+#if ZCL_IAS_ZONE_SUPPORT
+#define ZCL_IAS_ZONE
 #endif
 
 /**********************************************************************

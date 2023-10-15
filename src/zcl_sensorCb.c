@@ -6,6 +6,7 @@
 #include "zcl_include.h"
 #include "device.h"
 #include "app_ui.h"
+#include "stdint.h"
 
 /**********************************************************************
  * LOCAL CONSTANTS
@@ -44,6 +45,8 @@ static void sensorDevice_zclDfltRspCmd(u16 clusterId, zclDefaultRspCmd_t *pDftRs
 #ifdef ZCL_IDENTIFY
 static ev_timer_event_t *identifyTimerEvt = NULL;
 #endif
+
+static uint8_t led_stat = 0;
 
 /**********************************************************************
  * FUNCTIONS
@@ -272,6 +275,7 @@ void sensorDevice_zclIdentifyTimerStop(void)
  */
 void sensorDevice_zclIdentifyCmdHandler(u8 endpoint, u16 srcAddr, u16 identifyTime)
 {
+#if MODULE_LCD_ENABLE
 	g_zcl_identifyAttrs.identifyTime = identifyTime;
 
 	if(identifyTime == 0){
@@ -283,6 +287,7 @@ void sensorDevice_zclIdentifyCmdHandler(u8 endpoint, u16 srcAddr, u16 identifyTi
 			identifyTimerEvt = TL_ZB_TIMER_SCHEDULE(sensorDevice_zclIdentifyTimerCb, NULL, 1000);
 		}
 	}
+#endif // MODULE_LCD_ENABLE
 }
 
 /*********************************************************************
@@ -296,6 +301,7 @@ void sensorDevice_zclIdentifyCmdHandler(u8 endpoint, u16 srcAddr, u16 identifyTi
  */
 static void sensorDevice_zcltriggerCmdHandler(zcl_triggerEffect_t *pTriggerEffect)
 {
+#if MODULE_LCD_ENABLE
 	u8 effectId = pTriggerEffect->effectId;
 	//u8 effectVariant = pTriggerEffect->effectVariant;
 
@@ -321,6 +327,7 @@ static void sensorDevice_zcltriggerCmdHandler(zcl_triggerEffect_t *pTriggerEffec
 		default:
 			break;
 	}
+#endif // MODULE_LCD_ENABLE
 }
 
 /*********************************************************************
@@ -672,3 +679,52 @@ status_t sensorDevice_pollCtrlCb(zclIncomingAddrInfo_t *pAddrInfo, u8 cmdId, voi
 	return status;
 }
 #endif	/* ZCL_POLL_CTRL */
+
+#ifdef ZCL_ON_OFF
+status_t sensorDevice_onOffCb(zclIncomingAddrInfo_t *pAddrInfo, u8 cmdId, void *cmdPayload)
+{
+	zcl_onOffAttr_t *pOnOff = zcl_onoffAttrGet();
+
+	if (pAddrInfo->dstEp == 0x01) {
+        switch(cmdId){
+            case ZCL_CMD_ONOFF_ON:
+                drv_gpio_write(LED1, 1);
+                led_stat = 1;
+                break;
+            case ZCL_CMD_ONOFF_OFF:
+                drv_gpio_write(LED1, 0);
+                led_stat = 0;
+                break;
+            case ZCL_CMD_ONOFF_TOGGLE:
+                if (led_stat == 0) {
+                    drv_gpio_write(LED1, 1);
+                } else {
+                    drv_gpio_write(LED1, 0);
+                }
+                led_stat = 1 - led_stat;
+                break;
+            case ZCL_CMD_OFF_WITH_EFFECT:
+                if(pOnOff->globalSceneControl == TRUE){
+                    /* TODO: store its settings in its global scene */
+                    pOnOff->globalSceneControl = FALSE;
+                }
+                //
+                break;
+            case ZCL_CMD_ON_WITH_RECALL_GLOBAL_SCENE:
+                if(pOnOff->globalSceneControl == FALSE){
+                    //
+                    pOnOff->globalSceneControl = TRUE;
+                }
+                break;
+            case ZCL_CMD_ON_WITH_TIMED_OFF:
+                //
+                break;
+            default:
+                break;
+        }
+    }
+
+	return ZCL_STA_SUCCESS;
+}
+#endif  /* ZCL_ON_OFF */
+
