@@ -30,6 +30,7 @@ python3 TLSR825xComFlasher.py -p /dev/ttyUSB0 -b 500000 ea
 python3 ATCtelink.py  --port /dev/ttyUSB0 --baud 500000 build/src/z03mmc.bin
 ```
 
+found my problem, timing issue, my USB-Adapter have no Crystal and depends on temperature, order a new one
 
 
 ## Overview
