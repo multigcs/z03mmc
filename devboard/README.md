@@ -25,7 +25,6 @@
 
 | header pin | PROGRAMMER |
 | --- | --- |
-
 | B1 | RX |
 | B2 | TX |
 | B3 | 3V3 |
