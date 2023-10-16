@@ -33,3 +33,5 @@
 
 ![](./open.jpg)
 ![](./closed.jpg)
+
+http://wiki.telink-semi.cn/doc/ds/DS_TLSR8251-E_Datasheet%20for%20Telink%20BLE+IEEE802.15.4%20Multi-Standard%20Wireless%20SoC%20TLSR8251.pdf
