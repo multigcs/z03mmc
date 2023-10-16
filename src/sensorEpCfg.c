@@ -21,10 +21,10 @@
 #else // MIMIC_HEIMAN
 
 #ifndef ZCL_BASIC_MFG_NAME
-#define ZCL_BASIC_MFG_NAME     {6,'X','i','a','o','m','i'}
+#define ZCL_BASIC_MFG_NAME     {6,'O','l','i','v','e','r'}
 #endif
 #ifndef ZCL_BASIC_MODEL_ID
-#define ZCL_BASIC_MODEL_ID	   {10,'L','Y','W','S','D','0','3','M','M','C'}
+#define ZCL_BASIC_MODEL_ID	   {6,'L','a','m','p','0','1'}
 #endif
 
 #endif // MIMIC_HEIMAN

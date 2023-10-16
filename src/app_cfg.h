@@ -147,7 +147,10 @@ extern "C" {
 #endif
 
 /* LCD */
-#define	MODULE_LCD_ENABLE							1
+#define	MODULE_LCD_ENABLE							0
+
+/* switch light by presence automaticly */
+#define	PRESENCE_AUTO   							1
 
 
 /**********************************************************************

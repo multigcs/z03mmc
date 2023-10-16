@@ -33,7 +33,7 @@ extern "C" {
 
 
 // LED
-#define LED1     					GPIO_PC4
+#define LED1     					GPIO_PC4  // P9 test point
 #define PC4_FUNC					AS_GPIO
 #define PC4_OUTPUT_ENABLE			1
 #define PC4_INPUT_ENABLE			0

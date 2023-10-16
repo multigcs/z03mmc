@@ -236,6 +236,23 @@ void app_key_handler(void){
         statusChangeNotification.zoneId = ZCL_ZONE_ID_INVALID;
         statusChangeNotification.delay = 0;
         zcl_iasZone_statusChangeNotificationCmd(SENSOR_DEVICE_ENDPOINT, &dstEpInfo, TRUE, &statusChangeNotification);
+
+#if PRESENCE_AUTO
+        epInfo_t dstEpInfo1;
+        TL_SETSTRUCTCONTENT(dstEpInfo1, 0);
+        dstEpInfo1.dstAddrMode = APS_SHORT_DSTADDR_WITHEP;
+        dstEpInfo1.dstEp = SENSOR_DEVICE_ENDPOINT;
+        dstEpInfo1.dstAddr.shortAddr = 0x0000;
+        dstEpInfo1.profileId = HA_PROFILE_ID;
+        if (presence_new == 0) {
+            drv_gpio_write(LED1, 0);
+            zcl_onOff_offCmd(SENSOR_DEVICE_ENDPOINT, &dstEpInfo1, FALSE);
+        } else {
+            drv_gpio_write(LED1, 1);
+            zcl_onOff_onCmd(SENSOR_DEVICE_ENDPOINT, &dstEpInfo1, FALSE);
+        }
+#endif
+
     }
 #endif
 
