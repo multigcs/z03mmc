@@ -16,19 +16,19 @@
 | 10 | P9  | PC4 | LED | PWM2/UART_CTS/PWM0_N/sar_aio<8> |
 | 11 | P8  | PA6 | SW3 | DP(SWS) |
 | 12 | P5  |     |     |  |
-| 13 | P14 | PA7 |     | SWS/UART_RTS |
+| 13 | P14 | PA7 | SWS | SWS/UART_RTS |
 | 14 | P10 | PB6 | ?   | SDM_P1/SPI_DI/UART_RTS/lc_comp_ain<6>/sar_aio<6> |
 | 15 | 3V3 | 3V3 |     |  |
 | 16 | GND | GND |     |  |
 |    | B1  | PB7 |     | SDM_N1/SPI_DO/UART_RX/lc_comp_ain<7>/sar_aio<7> |
 
 
-| header pin | PROGRAMMER |
-| --- | --- |
-| B1 | RX |
-| B2 | TX |
-| B3 | 3V3 |
-| B4 | GND |
+| header pin | PROGRAMMER | | test pin
+| --- | --- | --- |
+| B1 | RX | P14 |
+| B2 | TX | P14 (over 1k2) |
+| B3 | 3V3 | 3V3 |
+| B4 | GND | GND |
 
 
 ![](./open.jpg)
